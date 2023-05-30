@@ -1,11 +1,11 @@
 const usuariosControlador = require("./usuarios-controlador");
-const passaport = require("passport");
+const passport = require("passport");
 
 module.exports = (app) => {
 	app
 		.route("/usuario/login")
 		.post(
-			passaport.authenticate("local", { session: false }),
+			passport.authenticate("local", { session: false }),
 			usuariosControlador.login
 		);
 
@@ -14,5 +14,10 @@ module.exports = (app) => {
 		.post(usuariosControlador.adiciona)
 		.get(usuariosControlador.lista);
 
-	app.route("/usuario/:id").delete(usuariosControlador.deleta);
+	app
+		.route("/usuario/:id")
+		.delete(
+			passport.authenticate("bearer", { session: false }),
+			usuariosControlador.deleta
+		);
 };
